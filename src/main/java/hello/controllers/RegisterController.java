@@ -1,4 +1,4 @@
-package hello;
+package hello.controllers;
 
 import hello.models.UserAccount;
 import org.springframework.stereotype.Controller;

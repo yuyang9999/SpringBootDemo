@@ -1,4 +1,4 @@
-package hello;
+package hello.config;
 
 /**
  * Created by yangyu on 13/8/17.
