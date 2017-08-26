@@ -14,6 +14,10 @@ import javax.validation.constraints.Size;
 @Data
 public class UserAccount {
     @NotNull
+    @Size (min = 2, max = 15)
+    private String userName;
+
+    @NotNull
     @Email
     private String email;
 
@@ -28,6 +32,8 @@ public class UserAccount {
         this.email = email;
         this.password = password;
     }
+
+    public String getUserName() {return userName;}
 
     public String getEmail() {return email;}
 
