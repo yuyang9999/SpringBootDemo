@@ -7,13 +7,45 @@
 <body>
 
 <div id="profiles">
+</div>
 
+<div id="symbols">
 </div>
 
 </body>
 
 <script type="application/javascript">
-    //ui functions
+    //utilities
+
+    //<![CDATA[
+    function encodeQueryData(data) {
+        var ret = [];
+        for (var d in data)
+            ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+        return ret.join("&");
+    }
+
+    function removeAllChildren(elem) {
+        if (elem) {
+            while (elem.firstChild) {
+                elem.removeChild(elem.firstChild);
+            }
+        }
+    }
+
+    //]]>
+</script>
+
+<script type="application/javascript">
+    //ui functions, events
+    function profileClick(event) {
+        var element = this;
+        var name = element.innerHTML;
+        getProfileSymbols(name, function(symbols) {
+            addSymbols(symbols);
+        });
+    }
+
     function addProfiles(profiles) {
         var prs = document.getElementById("profiles");
         while (prs.firstChild) {
@@ -26,42 +58,69 @@
         prs.appendChild(ul);
 
         profiles.forEach(function (profile, idx, arr) {
-            var li = document.createELement("li");
-            li.innerHTML = profile;
-            ul.appendChild(li);
+            var button = document.createElement("button");
+            button.onclick = profileClick;
+            button.innerHTML = profile;
+            ul.appendChild(button);
         });
+    }
 
+    function addSymbols(symbols) {
+        var sdiv = document.getElementById("symbols");
+        //remove all children
+        removeAllChildren(sdiv);
+        var ul = document.createElement("ul");
+        sdiv.appendChild(ul);
+
+        symbols.forEach(function (symbol, idx, arr) {
+            var button = document.createElement("button");
+            button.innerHTML = symbol;
+            ul.appendChild(button);
+        });
     }
 </script>
 
+
 <script type="application/javascript">
-    function getProfiles() {
-        fetch('/profiles').then(function(resp) {
+    //models
+    function getProfiles(cmpHandler) {
+        fetch('/api/profiles').then(function(resp) {
             if (resp.ok) {
-                var profiles = resp.json();
-                addProfiles(profiles)
+                resp.json().then(function(profiles) {
+                   cmpHandler(profiles);
+                });
             }
         }, function(e) {
-            alert(e);
+            console.log(e);
+            cmpHandler([]);
         });
     }
 
-    function getProfileSymbols(profileName) {
-        fetch('/profile_symbols').then(function(resp) {
-            if (resp.ok) {
-                var symbols = resp.json();
+    function getProfileSymbols(profileName, cmpHanlder) {
+        var dic = {pname: profileName};
+        var url = '/api/profile_symbols?' + encodeQueryData(dic);
 
+        fetch(url).then(function(resp) {
+            if (resp.ok) {
+                resp.json().then(function(symbols) {
+                    cmpHanlder(symbols);
+                });
             }
         }, function(e) {
-            alert(e);
+            console.log(e);
+            cmpHanlder([]);
         });
     }
+</script>
 
 
+<script type="application/javascript">
     document.addEventListener("DOMContentLoaded", function(e) {
-        getProfiles();
-    });
+        getProfiles(function(profiles) {
+            addProfiles(profiles);
+        });
 
+    });
 
 </script>
 

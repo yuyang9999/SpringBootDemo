@@ -10,19 +10,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class APIGetProfiles {
 
-    private static final String apiVersion = "";
+    private static final String apiVersion = "/api";
 
-    @RequestMapping("/profiles")
+    @RequestMapping(apiVersion + "/profiles")
     public String[] getProfiles() {
-        return new String[]{"technology", "finance"};
+        String[] ret =  new String[]{"technology", "finance"};
+        return ret;
     }
 
-    @RequestMapping("/profile_symbols")
+    @RequestMapping(apiVersion + "/profile_symbols")
     public String[] getProfileSymbols(@RequestParam(value = "pname") String pname) {
         return new String[]{"AAPL", "NTES"};
     }
 
-    @RequestMapping("/profile_add")
+    @RequestMapping(apiVersion + "/profile_add")
     public boolean addProfileSymbol(@RequestParam(value = "pname") String pname,  @RequestParam(value = "sname") String sname) {
         return true;
     }
