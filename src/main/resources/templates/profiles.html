@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>profiles</title>
+</head>
+<body>
+
+<div id="profiles">
+
+</div>
+
+</body>
+
+<script type="application/javascript">
+    //ui functions
+    function addProfiles(profiles) {
+        var prs = document.getElementById("profiles");
+        while (prs.firstChild) {
+            prs.removeChild(prs.firstChild);
+        }
+
+        //create ul
+        var ul = document.createElement("ul");
+        ul.setAttribute("id", "profile_list");
+        prs.appendChild(ul);
+
+        profiles.forEach(function (profile, idx, arr) {
+            var li = document.createELement("li");
+            li.innerHTML = profile;
+            ul.appendChild(li);
+        });
+
+    }
+</script>
+
+<script type="application/javascript">
+    function getProfiles() {
+        fetch('/profiles').then(function(resp) {
+            if (resp.ok) {
+                var profiles = resp.json();
+                addProfiles(profiles)
+            }
+        }, function(e) {
+            alert(e);
+        });
+    }
+
+    function getProfileSymbols(profileName) {
+        fetch('/profile_symbols').then(function(resp) {
+            if (resp.ok) {
+                var symbols = resp.json();
+
+            }
+        }, function(e) {
+            alert(e);
+        });
+    }
+
+
+    document.addEventListener("DOMContentLoaded", function(e) {
+        getProfiles();
+    });
+
+
+</script>
+
+
+</html>
