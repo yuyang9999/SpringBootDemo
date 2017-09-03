@@ -6,9 +6,15 @@
 </head>
 <body>
 
+<input id="input_profile" type="text"/>
+<button onclick="createProfileBtnPressed(event)" >create profile</button>
+
 <div id="profiles">
 </div>
 
+
+<input id="input_symbol" type="text" />
+<button onclick="createProfileSymbolBtnPressed(event)">create symbol</button>
 <div id="symbols">
 </div>
 
@@ -44,6 +50,26 @@
         getProfileSymbols(name, function(symbols) {
             addSymbols(symbols);
         });
+    }
+
+    function createProfileBtnPressed(event) {
+        var proInputElem = document.getElementById('input_profile');
+        if (proInputElem) {
+            var text = proInputElem.value;
+            if (text) {
+                createNewProfile(text, function(succeed) {
+                    if (succeed) {
+                        getProfiles(function(profiles) {
+                            addProfiles(profiles);
+                        });
+                    }
+                })
+            }
+        }
+    }
+
+    function createProfileSymbolBtnPressed(event) {
+
     }
 
     function addProfiles(profiles) {
@@ -83,6 +109,41 @@
 
 <script type="application/javascript">
     //models
+    function createNewProfile(pname, cmpHandler) {
+        fetch('/api/profile_add?' + encodeQueryData({pname:pname})).then(function (resp){
+            if (resp.ok) {
+                resp.json().then(function(data){
+                    cmpHandler(true);
+                })
+            } else {
+                cmpHandler(false);
+            }
+        }, function(e) {
+            cmpHandler(false);
+        });
+    }
+
+    function deleteOneProfile(pname, cmpHandler) {
+        fetch('/api/profile_delete?' + encodeQueryData({pname:pname})).then(function (resp){
+            },
+        function(e) {
+        });
+    }
+
+    function addOneSymbol(pname, sname, cmpHandler) {
+        fetch('/api/profile_symbol_add' + encodeQueryData({pname: pname, sname:sname})).then(
+            function(resp) {},
+            function(e) {}
+        );
+    }
+
+    function deleteOneSymbol(pname, sname, cmpHandler) {
+        fetch('/api/profile_symbol_delete' + encodeQueryData({pname: pname, sname: sname})).then(
+            function(resp) {},
+            function(e) {}
+        );
+    }
+
     function getProfiles(cmpHandler) {
         fetch('/api/profiles').then(function(resp) {
             if (resp.ok) {
