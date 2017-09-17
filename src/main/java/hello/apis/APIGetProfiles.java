@@ -1,9 +1,8 @@
 package hello.apis;
 
+import hello.models.StockLookup;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
@@ -25,14 +24,19 @@ public class APIGetProfiles {
         return ret;
     }
 
-    @RequestMapping(apiVersion + "/profile_delete")
-    public boolean deleteOneProfile(@RequestParam(value = "pname") String pname) {
+    @RequestMapping(value = apiVersion + "/profile_delete", method = RequestMethod.POST, consumes = {"application/json"})
+    public boolean deleteOneProfile(@RequestBody String[] names) {
+        System.out.println(names);
         return true;
     }
 
     @RequestMapping(apiVersion + "/profile_add")
     public boolean addOneProfile(@RequestParam(value = "pname") String pname) {
-        return true;
+        if (StockLookup.checkStockSymbolValid(pname)) {
+            return true;
+        }
+
+        return false;
     }
 
     @RequestMapping(apiVersion + "/profile_symbols")

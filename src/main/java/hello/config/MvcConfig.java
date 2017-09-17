@@ -3,7 +3,9 @@ package hello.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
@@ -37,6 +39,18 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         driverManagerDataSource.setUsername("root");
         driverManagerDataSource.setPassword("123456");
         return driverManagerDataSource;
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigure() {
+        return new WebMvcConfigurerAdapter() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                super.addCorsMappings(registry);
+                registry.addMapping("/api/*").allowedOrigins("http://localhost:3000");
+//                registry.addMapping("/api/profile_delete").allowedOrigins("http://localhost:3000");
+            }
+        };
     }
 
 //    @Bean

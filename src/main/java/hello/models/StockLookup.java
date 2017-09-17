@@ -74,5 +74,12 @@ public class StockLookup {
     }
 
 
+    public static boolean checkStockSymbolValid(String symbol) {
+        if (stockNames.contains(symbol)) {
+            return true;
+        }
+
+        return false;
+    }
 
 }
