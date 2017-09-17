@@ -13,9 +13,6 @@ import javax.sql.DataSource;
 @RestController
 public class APIGetProfiles {
 
-    @Autowired
-    DataSource dataSource;
-
     private static final String apiVersion = ApiConfig.apiVersion;
 
     @RequestMapping(apiVersion + "/profiles")

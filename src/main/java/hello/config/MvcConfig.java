@@ -31,15 +31,15 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     }
     */
 
-    @Bean(name="dataSource")
-    public DriverManagerDataSource dataSource() {
-        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-        driverManagerDataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/test");
-        driverManagerDataSource.setUsername("root");
-        driverManagerDataSource.setPassword("123456");
-        return driverManagerDataSource;
-    }
+//    @Bean(name="dataSource")
+//    public DriverManagerDataSource dataSource() {
+//        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
+//        driverManagerDataSource.setDriverClassName("com.mysql.jdbc.Driver");
+//        driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/test");
+//        driverManagerDataSource.setUsername("root");
+//        driverManagerDataSource.setPassword("123456");
+//        return driverManagerDataSource;
+//    }
 
     @Bean
     public WebMvcConfigurer corsConfigure() {
