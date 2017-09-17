@@ -17,7 +17,7 @@ public class APIGetProfiles {
     @Autowired
     DataSource dataSource;
 
-    private static final String apiVersion = "/api";
+    private static final String apiVersion = ApiConfig.apiVersion;
 
     @RequestMapping(apiVersion + "/profiles")
     public String[] getProfiles(HttpSession session) {
@@ -49,4 +49,5 @@ public class APIGetProfiles {
     public boolean deleteProfileSymbol(@RequestParam(value = "pname") String pname, @RequestParam(value = "sname") String sname) {
         return true;
     }
+
 }
