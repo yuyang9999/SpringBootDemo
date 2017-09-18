@@ -1,13 +1,12 @@
-package com.websystique.springmvc.service;
+package springmvc.service;
+
+import springmvc.model.User;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
-
-import org.springframework.stereotype.Service;
-
-import com.websystique.springmvc.model.User;
 
 @Service("userService")
 public class UserServiceImpl implements UserService{

@@ -1,8 +1,8 @@
-package com.websystique.springmvc.configuration;
-
-import javax.servlet.Filter;
+package springmvc.configuration;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import javax.servlet.Filter;
 
 public class HelloWorldInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
  
@@ -23,7 +23,7 @@ public class HelloWorldInitializer extends AbstractAnnotationConfigDispatcherSer
     
     @Override
     protected Filter[] getServletFilters() {
-    	Filter [] singleton = { new CORSFilter()};
+    	Filter[] singleton = { new CORSFilter()};
     	return singleton;
     }
  
