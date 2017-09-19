@@ -1,12 +1,18 @@
 package springmvc.configuration;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
+@Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class CORSFilter implements Filter {
 
+	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 		System.out.println("Filtering on...........................................................");
 		HttpServletResponse response = (HttpServletResponse) res;
@@ -19,8 +25,14 @@ public class CORSFilter implements Filter {
 		chain.doFilter(req, res);
 	}
 
-	public void init(FilterConfig filterConfig) {}
+	@Override
+	public void init(FilterConfig filterConfig) {
+		System.out.println("");
+	}
 
-	public void destroy() {}
+	@Override
+	public void destroy() {
+
+	}
 
 }
