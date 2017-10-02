@@ -3,16 +3,12 @@ package hello.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.provider.approval.ApprovalStore;
-import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
-import org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler;
-import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
-import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import javax.sql.DataSource;
 
@@ -26,14 +22,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Autowired
-    private DataSource dataSource;
-
-//    @Autowired
-//    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.jdbcAuthentication().dataSource(dataSource)
-//                .usersByUsernameQuery("select username, password, enabled from users where username=?")
-//                .authoritiesByUsernameQuery("select username, role from user_roles where username=?");
-//    }
+    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+        auth.jdbcAuthentication().dataSource(accountDataSource())
+                .usersByUsernameQuery("select username, password, enabled from users where username=?")
+                .authoritiesByUsernameQuery("select username, role from user_roles where username=?");
+    }
 
 
 //    @Override
@@ -76,15 +69,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     */
 
 
-    @Autowired
-    public void globalUserDetails(final AuthenticationManagerBuilder auth) throws Exception {
-        // @formatter:off
-        auth.inMemoryAuthentication()
-                .withUser("john").password("123").roles("USER").and()
-                .withUser("tom").password("111").roles("ADMIN").and()
-                .withUser("user1").password("pass").roles("USER").and()
-                .withUser("admin").password("nimda").roles("ADMIN");
-    }// @formatter:on
+//    @Autowired
+//    public void globalUserDetails(final AuthenticationManagerBuilder auth) throws Exception {
+//        // @formatter:off
+//
+//
+//        auth.inMemoryAuthentication()
+//                .withUser("john").password("123").roles("USER").and()
+//                .withUser("tom").password("111").roles("ADMIN").and()
+//                .withUser("user1").password("pass").roles("USER").and()
+//                .withUser("admin").password("nimda").roles("ADMIN");
+//    }// @formatter:on
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
@@ -109,4 +104,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .inMemoryAuthentication()
 //                .withUser("user").password("password").roles("USER");
 //    }
+
+    public DataSource accountDataSource() {
+        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
+        driverManagerDataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/test");
+        driverManagerDataSource.setUsername("root");
+        driverManagerDataSource.setPassword("123456");
+        return driverManagerDataSource;
+    }
+
+
 }

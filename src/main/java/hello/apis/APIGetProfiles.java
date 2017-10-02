@@ -1,6 +1,7 @@
 package hello.apis;
 
 import hello.models.StockLookup;
+import hello.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,9 @@ import javax.sql.DataSource;
 public class APIGetProfiles {
 
     private static final String apiVersion = ApiConfig.apiVersion;
+
+    @Autowired
+    private UserAccountService accountService;
 
     @RequestMapping(apiVersion + "/profiles")
     public String[] getProfiles(HttpSession session) {

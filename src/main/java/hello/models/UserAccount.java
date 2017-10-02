@@ -25,12 +25,13 @@ public class UserAccount {
     @Size(min = 5, max = 25)
     private String password;
 
+    private int userId;
 
-    public UserAccount() {}
-
-    public UserAccount(String email, String password) {
+    public UserAccount(int userId, String userName, String email, String password) {
         this.email = email;
         this.password = password;
+        this.userName = userName;
+        this.userId = userId;
     }
 
     public String getUserName() {return userName;}
@@ -38,4 +39,6 @@ public class UserAccount {
     public String getEmail() {return email;}
 
     public String getPassword() {return password;}
+
+    public int getUserId() {return userId;}
 }
