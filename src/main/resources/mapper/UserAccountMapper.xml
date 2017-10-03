@@ -17,6 +17,21 @@
     from user_account
     where user_id = #{userId,jdbcType=INTEGER}
   </select>
+
+  <select id="selectByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_account
+    where username = #{userName, jdbcType = VARCHAR}
+  </select>
+
+  <select id="selectByEmail" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_account
+    where email= #{email, jdbcType = VARCHAR}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from user_account
     where user_id = #{userId,jdbcType=INTEGER}

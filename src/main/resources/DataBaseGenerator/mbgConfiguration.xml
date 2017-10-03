@@ -19,8 +19,8 @@
 
         <!-- 数据库连接 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://imac:3306/stock_db?characterEncoding=utf8"
-                        userId="stock_user"
+                        connectionURL="jdbc:mysql://localhost:3306/users?characterEncoding=utf8"
+                        userId="root"
                         password="123456">
         </jdbcConnection>
 
@@ -29,23 +29,41 @@
         </javaTypeResolver>
 
         <!-- 数据表对应的model 层  -->
-        <javaModelGenerator targetPackage="hello.model" targetProject="src">
+        <javaModelGenerator targetPackage="hello.models.dbmodel" targetProject="src">
             <property name="enableSubPackages" value="true" />
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
 
         <!-- sql mapper 隐射配置文件 -->
-        <sqlMapGenerator targetPackage="hello.mapper"  targetProject="src">
+        <sqlMapGenerator targetPackage="hello.models.mapper"  targetProject="src">
             <property name="enableSubPackages" value="true" />
         </sqlMapGenerator>
 
         <!-- 在ibatis2 中是dao层，但在mybatis3中，其实就是mapper接口 -->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="hello.inter"  targetProject="src">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="hello.models.inter"  targetProject="src">
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
         <!-- 要对那些数据表进行生成操作，必须要有一个. -->
-        <table schema="stock_db" tableName="user_profiles" domainObjectName="UserProfiles"
+        <table schema="users" tableName="profiles" domainObjectName="Profile"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
+
+        <table schema="users" tableName="profile_stocks" domainObjectName="ProfileStock"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
+
+        <table schema="users" tableName="user_account" domainObjectName="UserAccount"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
+
+        <table schema="users" tableName="user_account_roles" domainObjectName="UserRole"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">

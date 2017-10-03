@@ -8,15 +8,17 @@
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://imac:3306/stock_db"/>
-                <property name="username" value="stock_user"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/users"/>
+                <property name="username" value="root"/>
                 <property name="password" value="123456"/>
             </dataSource>
         </environment>
     </environments>
     <mappers>
-        <mapper resource="BlogMapper.xml"/>
-        <mapper resource="StockSymbolMapper.xml"/>
+        <mapper resource="mapper/ProfileMapper.xml"/>
+        <mapper resource="mapper/ProfileStockMapper.xml"/>
+        <mapper resource="mapper/UserAccountMapper.xml" />
+        <mapper resource="mapper/UserRoleMapper.xml" />
         <!--<mapper resource="StockUserMapper.xml"/>-->
         <!--<mapper resource="UserProfilesMapper.xml" />-->
     </mappers>

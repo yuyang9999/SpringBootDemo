@@ -1,6 +1,6 @@
 package hello.services;
 
-import hello.models.UserAccount;
+import hello.models.dbmodel.UserAccount;
 
 import java.util.List;
 

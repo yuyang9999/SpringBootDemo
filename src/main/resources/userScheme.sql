@@ -7,7 +7,7 @@ create table user_account (
   user_id int(11) not null auto_increment,
   username varchar(45) NOT NULL,
   password varchar(45) NOT NULL,
-  enabled tinyint(4) NOT NULL DEFAULT '1',
+  enabled tinyint(4) NOT NULL DEFAULT 1,
   email varchar(100) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   KEY `name_key_idx` (`username`)
