@@ -2,6 +2,8 @@ package hello.models.inter;
 
 import hello.models.dbmodel.ProfileStock;
 
+import java.util.List;
+
 public interface ProfileStockMapper {
     int deleteByPrimaryKey(Integer sid);
 
@@ -14,4 +16,6 @@ public interface ProfileStockMapper {
     int updateByPrimaryKeySelective(ProfileStock record);
 
     int updateByPrimaryKey(ProfileStock record);
+
+    List<ProfileStock> selectByProfileId(Integer pid);
 }

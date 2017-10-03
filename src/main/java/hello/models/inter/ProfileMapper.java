@@ -2,6 +2,8 @@ package hello.models.inter;
 
 import hello.models.dbmodel.Profile;
 
+import java.util.List;
+
 public interface ProfileMapper {
     int deleteByPrimaryKey(Integer pid);
 
@@ -14,4 +16,8 @@ public interface ProfileMapper {
     int updateByPrimaryKeySelective(Profile record);
 
     int updateByPrimaryKey(Profile record);
+
+    List<Profile> selectByUserId(Integer userId);
+
+    Profile selectByUserIdAndProfileName(Integer userId, String pname);
 }

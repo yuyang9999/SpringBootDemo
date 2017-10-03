@@ -1,14 +1,11 @@
 package hello.services.impl;
 
-import hello.models.DataSourcesUtility;
-import hello.models.UserProfile;
-import hello.models.UserStock;
+import hello.models.dbmodel.Profile;
+import hello.models.dbmodel.ProfileStock;
+import hello.models.inter.ProfileStockMapper;
 import hello.services.StockService;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -17,45 +14,62 @@ import java.util.List;
  */
 @Service
 public class StockServiceImpl implements StockService {
-    private DataSource mDataSource;
-    private Connection mConnection;
+    private ProfileStockMapper stockMapper;
 
     public StockServiceImpl() {
-        mDataSource = DataSourcesUtility.userDataSource;
-        try {
-            mConnection = mDataSource.getConnection();
-        } catch (SQLException e) {
-            System.out.println(e);
+        stockMapper = BatisMappers.profileStockMapper;
+    }
+
+    @Override
+    public List<ProfileStock> getProfileStocks(Profile profile) {
+        return stockMapper.selectByProfileId(profile.getPid());
+    }
+
+    @Override
+    public boolean createNewStock(Profile profile, String symbol, float price, int share, Date boughtDate) {
+        if (profile == null) {
+            return false;
         }
+
+        ProfileStock profileStock = new ProfileStock();
+        profileStock.setPid(profile.getPid());
+        profileStock.setSname(symbol);
+        profileStock.setPrice(price);
+        profileStock.setShare(share);
+        profileStock.setBoughtTime(boughtDate);
+        profileStock.setUserId(profile.getUserId());
+
+        int ret = stockMapper.insertSelective(profileStock);
+
+        return ret == 1;
     }
 
     @Override
-    public List<UserStock> getProfileStocks(UserProfile profile) {
-        return null;
+    public boolean deleteOneStock(ProfileStock stock) {
+        int ret = stockMapper.deleteByPrimaryKey(stock.getSid());
+        return ret == 1;
     }
 
     @Override
-    public boolean createNewStock(UserProfile profile, String symbol, float price, float share, Date boughtDate) {
-        return false;
+    public boolean updateStockPrice(ProfileStock stock, float price) {
+        stock.setPrice(price);
+        int update = stockMapper.updateByPrimaryKeySelective(stock);
+        return update == 1;
     }
 
     @Override
-    public boolean deleteOneStock(UserStock stock) {
-        return false;
+    public boolean updateStockShare(ProfileStock stock, int share) {
+        stock.setShare(share);
+        int update = stockMapper.updateByPrimaryKeySelective(stock);
+
+        return update == 1;
     }
 
     @Override
-    public boolean updateStockPrice(UserStock stock, float price) {
-        return false;
-    }
+    public boolean updateStockBoughtDate(ProfileStock stock, Date newDate) {
+        stock.setBoughtTime(newDate);
+        int update = stockMapper.updateByPrimaryKeySelective(stock);
 
-    @Override
-    public boolean updateStockShare(UserStock stock, float share) {
-        return false;
-    }
-
-    @Override
-    public boolean updateStockBoughtDate(UserStock stock, Date newDate) {
-        return false;
+        return update == 1;
     }
 }

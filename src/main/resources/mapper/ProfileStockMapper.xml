@@ -13,12 +13,22 @@
   <sql id="Base_Column_List">
     sid, user_id, pid, sname, price, share, bought_time
   </sql>
+
+  <select id="selectByProfileId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from profile_stocks
+    where pid= #{pid, jdbcType=INTEGER}
+  </select>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from profile_stocks
     where sid = #{sid,jdbcType=INTEGER}
   </select>
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from profile_stocks
     where sid = #{sid,jdbcType=INTEGER}

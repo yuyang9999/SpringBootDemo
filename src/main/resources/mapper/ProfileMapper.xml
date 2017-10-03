@@ -6,15 +6,32 @@
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="pname" jdbcType="VARCHAR" property="pname" />
   </resultMap>
+
+  
   <sql id="Base_Column_List">
     pid, user_id, pname
   </sql>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from profiles
     where pid = #{pid,jdbcType=INTEGER}
   </select>
+
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from profiles
+    where user_id= #{user_id, jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByUserIdAndProfileName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    where user_id=#{param1} and pname=#{param2}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from profiles
     where pid = #{pid,jdbcType=INTEGER}

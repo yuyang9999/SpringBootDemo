@@ -1,16 +1,11 @@
 package hello.services.impl;
 
-import hello.models.DataSourcesUtility;
-import hello.models.UserAccount;
-import hello.models.UserProfile;
+import hello.models.dbmodel.Profile;
+import hello.models.dbmodel.UserAccount;
+import hello.models.inter.ProfileMapper;
 import hello.services.ProfileService;
-import lombok.extern.log4j.Log4j;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -18,36 +13,43 @@ import java.util.List;
  */
 @Service
 public class ProfileServiceImpl implements ProfileService {
+    private ProfileMapper profileMapper;
 
     public ProfileServiceImpl() {
+        profileMapper = BatisMappers.profileMapper;
     }
 
     @Override
-    public List<UserProfile> getProfilesForUser(UserAccount account) {
-
-
-
-        return null;
+    public List<Profile> getProfilesForUser(UserAccount account) {
+        return profileMapper.selectByUserId(account.getUserId());
     }
 
     @Override
-    public boolean createNewProfileForUser(UserAccount account) {
+    public boolean createNewProfileForUser(UserAccount account, String profileName) {
+        Profile profile = new Profile();
+        profile.setUserId(account.getUserId());
+        profile.setPname(profileName);
 
+        profileMapper.insertSelective(profile);
         return false;
     }
 
     @Override
-    public boolean deleteProfileForUser(UserAccount account, UserProfile profile) {
-        return false;
+    public boolean deleteProfile(Profile profile) {
+        Integer deleteNum = profileMapper.deleteByPrimaryKey(profile.getPid());
+        return deleteNum == 1;
     }
 
     @Override
-    public UserProfile getUserProfileWithName(UserAccount account, String profileName) {
-        return null;
+    public Profile getUserProfileWithName(UserAccount account, String profileName) {
+        return profileMapper.selectByUserIdAndProfileName(account.getUserId(), profileName);
     }
 
     @Override
-    public boolean updateProfileName(UserProfile profile, String newProfileName) {
-        return false;
+    public boolean updateProfileName(Profile profile, String newProfileName) {
+        profile.setPname(newProfileName);
+        int ret = profileMapper.updateByPrimaryKeySelective(profile);
+
+        return ret == 1;
     }
 }
