@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hello.models.inter.ProfileStockMapper">
+  <resultMap id="BaseResultMap" type="hello.models.dbmodel.ProfileStock">
+    <id column="sid" jdbcType="INTEGER" property="sid" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="sname" jdbcType="VARCHAR" property="sname" />
+    <result column="price" jdbcType="REAL" property="price" />
+    <result column="share" jdbcType="INTEGER" property="share" />
+    <result column="bought_time" jdbcType="DATE" property="boughtTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    sid, user_id, pid, sname, price, share, bought_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from profile_stocks
+    where sid = #{sid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from profile_stocks
+    where sid = #{sid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="hello.models.dbmodel.ProfileStock">
+    insert into profile_stocks (sid, user_id, pid, 
+      sname, price, share, bought_time
+      )
+    values (#{sid,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER}, 
+      #{sname,jdbcType=VARCHAR}, #{price,jdbcType=REAL}, #{share,jdbcType=INTEGER}, #{boughtTime,jdbcType=DATE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="hello.models.dbmodel.ProfileStock">
+    insert into profile_stocks
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sid != null">
+        sid,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="sname != null">
+        sname,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="share != null">
+        share,
+      </if>
+      <if test="boughtTime != null">
+        bought_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sid != null">
+        #{sid,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="sname != null">
+        #{sname,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=REAL},
+      </if>
+      <if test="share != null">
+        #{share,jdbcType=INTEGER},
+      </if>
+      <if test="boughtTime != null">
+        #{boughtTime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="hello.models.dbmodel.ProfileStock">
+    update profile_stocks
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null">
+        pid = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="sname != null">
+        sname = #{sname,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=REAL},
+      </if>
+      <if test="share != null">
+        share = #{share,jdbcType=INTEGER},
+      </if>
+      <if test="boughtTime != null">
+        bought_time = #{boughtTime,jdbcType=DATE},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="hello.models.dbmodel.ProfileStock">
+    update profile_stocks
+    set user_id = #{userId,jdbcType=INTEGER},
+      pid = #{pid,jdbcType=INTEGER},
+      sname = #{sname,jdbcType=VARCHAR},
+      price = #{price,jdbcType=REAL},
+      share = #{share,jdbcType=INTEGER},
+      bought_time = #{boughtTime,jdbcType=DATE}
+    where sid = #{sid,jdbcType=INTEGER}
+  </update>
+</mapper>
