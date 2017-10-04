@@ -2,6 +2,8 @@ drop table if exists user_account_roles;
 drop table if exists profile_stocks;
 drop table if exists profiles;
 drop table if exists user_account;
+drop table if exists stock_history;
+drop table if exists stock_symbols;
 
 create table user_account (
   user_id int(11) not null auto_increment,
@@ -24,6 +26,33 @@ create table user_account_roles (
   CONSTRAINT `fk_username` FOREIGN KEY (`username`) REFERENCES `user_account` (`username`)
 )  default character set utf8mb4;
 
+
+create table stock_symbols (
+  stock_id int(11) not null auto_increment,
+  symbol varchar(50) not null,
+  name varchar(100) not null,
+  sector varchar(50),
+  industry varchar(50),
+  primary key (`stock_id`),
+  unique key `stock_symbol` (`symbol`)
+) default character set utf8mb4;
+
+create table stock_history(
+  h_id int(11) not null auto_increment,
+  symbol varchar(45) not null,
+  date DATE not null,
+  open FLOAT(10,2),
+  high FLOAT(10, 2),
+  low  FLOAT(10, 2),
+  clos FLOAT(10,2),
+  adj_close FLOAT(10,2),
+  volume int(11),
+  PRIMARY key (`h_id`),
+  UNIQUE KEY `sh_unique` (`symbol`, `date`),
+  CONSTRAINT `sh_symbol_id` FOREIGN KEY (`symbol`) REFERENCES `stock_symbols` (`symbol`)
+) DEFAULT CHARACTER SET utf8mb4;
+
+
 CREATE TABLE profiles (
   pid int(11) not null auto_increment,
   user_id int(11) not null,
@@ -45,5 +74,6 @@ create table profile_stocks (
   PRIMARY KEY (`sid`),
   KEY `stock_name_idx` (`pid`, `sname`),
   CONSTRAINT `fk_stock_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_account` (`user_id`),
-  CONSTRAINT `fk_pid` FOREIGN KEY (`pid`) REFERENCES `profiles` (`pid`)
+  CONSTRAINT `fk_pid` FOREIGN KEY (`pid`) REFERENCES `profiles` (`pid`),
+  CONSTRAINT `ps_fk_symbol` FOREIGN KEY (`sname`) REFERENCES `stock_symbols` (`symbol`)
 )  default character set utf8mb4;

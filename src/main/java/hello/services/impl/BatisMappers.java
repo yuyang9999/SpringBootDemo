@@ -1,10 +1,8 @@
 package hello.services.impl;
 
 
-import hello.models.inter.ProfileMapper;
-import hello.models.inter.ProfileStockMapper;
-import hello.models.inter.UserAccountMapper;
-import hello.models.inter.UserRoleMapper;
+import hello.models.DataSourcesUtility;
+import hello.models.inter.*;
 import lombok.Data;
 import lombok.Getter;
 import org.apache.ibatis.io.Resources;
@@ -14,6 +12,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -31,20 +30,26 @@ public class BatisMappers {
 
     static public UserRoleMapper userRoleMapper;
 
+    static public StockHistoryMapper stockHistoryMapper;
 
+    static public StockSymbolMapper stockSymbolMapper;
 
     static {
+        //invoke the datasource initializer
+        DataSource ds = DataSourcesUtility.userDataSource;
+
         String resource = "/DataBaseGenerator/mybatis-config.xml";
 
         InputStream inputStream = BatisMappers.class.getResourceAsStream(resource);
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 
-        SqlSession session = sqlSessionFactory.openSession();
+        SqlSession session = sqlSessionFactory.openSession(true);
 
         profileMapper = session.getMapper(ProfileMapper.class);
         profileStockMapper = session.getMapper(ProfileStockMapper.class);
         userAccountMapper = session.getMapper(UserAccountMapper.class);
         userRoleMapper = session.getMapper(UserRoleMapper.class);
-
+        stockHistoryMapper = session.getMapper(StockHistoryMapper.class);
+        stockSymbolMapper = session.getMapper(StockSymbolMapper.class);
     }
 }

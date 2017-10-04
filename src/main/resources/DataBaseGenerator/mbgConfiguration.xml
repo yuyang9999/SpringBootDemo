@@ -69,5 +69,17 @@
                selectByExampleQueryId="false">
         </table>
 
+        <table schema="users" tableName="stock_symbols" domainObjectName="StockSymbol"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
+
+        <table schema="users" tableName="stock_history" domainObjectName="StockHistory"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
+
     </context>
 </generatorConfiguration>

@@ -3,11 +3,10 @@ package hello.services.impl;
 import hello.Application;
 import hello.models.dbmodel.Profile;
 import hello.models.dbmodel.ProfileStock;
+import hello.models.dbmodel.StockSymbol;
 import hello.models.dbmodel.UserAccount;
 import hello.models.inter.ProfileStockMapper;
-import hello.services.ProfileService;
-import hello.services.StockService;
-import hello.services.UserAccountService;
+import hello.services.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +31,19 @@ public class UserAccountServiceImplTest {
     @Autowired
     StockService stockService;
 
+    @Autowired
+    StockSymbolService stockSymbolService;
+
+    @Autowired
+    StockHistoryService stockHistoryService;
+
     @Test
     public void testUserAccount() throws Exception {
+        //create stock symbol
+        StockSymbol applSymbol= stockSymbolService.addSymbol("AAPL","apple conpany", "tech", "tech");
+        applSymbol = stockSymbolService.getSymbolBySName("AAPL");
+        StockSymbol netsSymbol = stockSymbolService.addSymbol("NTES", "netease", "tech", "tech");
+
         //test user
         userAccountService.registerUser("test1", "test2", "test3");
         System.out.println(userAccountService.getUserByEmail("test2"));
@@ -50,6 +60,7 @@ public class UserAccountServiceImplTest {
 
         //test stock
         Profile profile = profiles.get(0);
+
 
         //create stock
         stockService.createNewStock(profile, "AAPL", 150, 10, new Date());

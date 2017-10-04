@@ -19,6 +19,8 @@
         <mapper resource="mapper/ProfileStockMapper.xml"/>
         <mapper resource="mapper/UserAccountMapper.xml" />
         <mapper resource="mapper/UserRoleMapper.xml" />
+        <mapper resource="mapper/StockHistoryMapper.xml" />
+        <mapper resource="mapper/StockSymbolMapper.xml" />
         <!--<mapper resource="StockUserMapper.xml"/>-->
         <!--<mapper resource="UserProfilesMapper.xml" />-->
     </mappers>

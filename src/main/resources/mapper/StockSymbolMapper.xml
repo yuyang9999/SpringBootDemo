@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hello.models.inter.StockSymbolMapper">
+  <resultMap id="BaseResultMap" type="hello.models.dbmodel.StockSymbol">
+    <id column="stock_id" jdbcType="INTEGER" property="stockId" />
+    <result column="symbol" jdbcType="VARCHAR" property="symbol" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sector" jdbcType="VARCHAR" property="sector" />
+    <result column="industry" jdbcType="VARCHAR" property="industry" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    stock_id, symbol, name, sector, industry
+  </sql>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from stock_symbols
+    where stock_id = #{stockId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectBySymbolName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    from stock_symbols
+    where symbol= #{symbolName, jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from stock_symbols
+    where stock_id = #{stockId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="hello.models.dbmodel.StockSymbol">
+    insert into stock_symbols (stock_id, symbol, name, 
+      sector, industry)
+    values (#{stockId,jdbcType=INTEGER}, #{symbol,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{sector,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="hello.models.dbmodel.StockSymbol">
+    insert into stock_symbols
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="stockId != null">
+        stock_id,
+      </if>
+      <if test="symbol != null">
+        symbol,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sector != null">
+        sector,
+      </if>
+      <if test="industry != null">
+        industry,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="stockId != null">
+        #{stockId,jdbcType=INTEGER},
+      </if>
+      <if test="symbol != null">
+        #{symbol,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sector != null">
+        #{sector,jdbcType=VARCHAR},
+      </if>
+      <if test="industry != null">
+        #{industry,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="hello.models.dbmodel.StockSymbol">
+    update stock_symbols
+    <set>
+      <if test="symbol != null">
+        symbol = #{symbol,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sector != null">
+        sector = #{sector,jdbcType=VARCHAR},
+      </if>
+      <if test="industry != null">
+        industry = #{industry,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where stock_id = #{stockId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="hello.models.dbmodel.StockSymbol">
+    update stock_symbols
+    set symbol = #{symbol,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      sector = #{sector,jdbcType=VARCHAR},
+      industry = #{industry,jdbcType=VARCHAR}
+    where stock_id = #{stockId,jdbcType=INTEGER}
+  </update>
+</mapper>
