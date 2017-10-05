@@ -24,8 +24,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication().dataSource(accountDataSource())
-                .usersByUsernameQuery("select username, password, enabled from users where username=?")
-                .authoritiesByUsernameQuery("select username, role from user_roles where username=?");
+                .usersByUsernameQuery("select username, password, enabled from user_account where username=?")
+                .authoritiesByUsernameQuery("select username, role from user_account_roles where username=?");
     }
 
 
@@ -108,7 +108,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public DataSource accountDataSource() {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
         driverManagerDataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/test");
+        driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/users");
         driverManagerDataSource.setUsername("root");
         driverManagerDataSource.setPassword("123456");
         return driverManagerDataSource;

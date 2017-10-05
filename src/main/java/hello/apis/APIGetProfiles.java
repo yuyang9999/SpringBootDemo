@@ -1,6 +1,10 @@
 package hello.apis;
 
 import hello.models.StockLookup;
+import hello.models.dbmodel.StockHistory;
+import hello.services.StockHistoryService;
+import hello.services.StockService;
+import hello.services.StockSymbolService;
 import hello.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +23,18 @@ public class APIGetProfiles {
     @Autowired
     private UserAccountService accountService;
 
+    @Autowired
+    private StockService stockService;
+
+    @Autowired
+    private StockHistoryService historyService;
+
+    @Autowired
+    private StockSymbolService symbolService;
+
     @RequestMapping(apiVersion + "/profiles")
     public String[] getProfiles(HttpSession session) {
+
         String[] ret =  new String[]{"technology", "finance"};
         return ret;
     }
