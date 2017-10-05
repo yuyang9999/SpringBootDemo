@@ -1,36 +1,25 @@
 package hello.config;
 
 import hello.Application;
-import org.codehaus.plexus.util.Base64;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JacksonJsonParser;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
-import org.springframework.security.oauth2.client.test.OAuth2ContextConfiguration;
-import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 @SpringBootTest(classes = Application.class)
+@ActiveProfiles("mvc")
 public class AuthServerOAuth2ConfigTest {
 
     @Autowired
@@ -55,7 +45,6 @@ public class AuthServerOAuth2ConfigTest {
     private static final String CONTENT_TYPE = "application/json;charset=UTF-8";
 
     private static final String AUTH_SERVER_URI = "/oauth/token";
-    private static final String QPM_PASSWORD_GRANT = "?grant_type=password&username=tom&password=123456";
 
     private MockMvc mockMvc;
 
@@ -90,7 +79,17 @@ public class AuthServerOAuth2ConfigTest {
 
     @Test
     public void testOauth() throws Exception {
-        System.out.println(obtainAccessToken("tom", "123456"));
+        String accessToken = obtainAccessToken("tom", "123456");
+
+        ResultActions result = mockMvc.perform(get("/api/profiles")
+                .header("Authorization", "Bearer " + accessToken)
+                .contentType(CONTENT_TYPE)
+                .accept(CONTENT_TYPE))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(CONTENT_TYPE));
+
+        String resultString = result.andReturn().getResponse().getContentAsString();
+        System.out.println(resultString);
     }
 
 }

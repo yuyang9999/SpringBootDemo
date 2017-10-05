@@ -7,8 +7,12 @@ import hello.services.StockService;
 import hello.services.StockSymbolService;
 import hello.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
@@ -34,6 +38,8 @@ public class APIGetProfiles {
 
     @RequestMapping(apiVersion + "/profiles")
     public String[] getProfiles(HttpSession session) {
+        Authentication contextHolder = SecurityContextHolder.getContext().getAuthentication();
+        Object crediential = contextHolder.getCredentials();
 
         String[] ret =  new String[]{"technology", "finance"};
         return ret;
