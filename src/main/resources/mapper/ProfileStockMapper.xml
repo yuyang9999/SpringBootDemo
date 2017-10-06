@@ -28,6 +28,12 @@
     where sid = #{sid,jdbcType=INTEGER}
   </select>
 
+  <select id="selectByProfileIdAndStockName" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from profile_stocks
+    where pid=#{param1} and sname=#{param2}
+  </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from profile_stocks

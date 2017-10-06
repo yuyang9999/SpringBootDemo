@@ -51,6 +51,16 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
+    public List<ProfileStock> getProfileStockWithName(Profile profile, String stockName) {
+        return stockMapper.selectByProfileIdAndStockName(profile.getPid(), stockName);
+    }
+
+    @Override
+    public ProfileStock getProfileStockWithPrimaryId(Integer id) {
+        return stockMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
     public boolean updateStockPrice(ProfileStock stock, float price) {
         stock.setPrice(price);
         int update = stockMapper.updateByPrimaryKeySelective(stock);

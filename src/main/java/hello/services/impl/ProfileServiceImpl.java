@@ -30,8 +30,8 @@ public class ProfileServiceImpl implements ProfileService {
         profile.setUserId(account.getUserId());
         profile.setPname(profileName);
 
-        profileMapper.insertSelective(profile);
-        return false;
+        int insertCnt = profileMapper.insertSelective(profile);
+        return insertCnt == 1;
     }
 
     @Override

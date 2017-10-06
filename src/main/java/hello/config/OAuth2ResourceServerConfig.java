@@ -17,7 +17,7 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
-                .authorizeRequests().antMatchers("/api/profiles").hasRole("USER");
+                .authorizeRequests().antMatchers("/api/**").hasRole("USER");
 
     }
 

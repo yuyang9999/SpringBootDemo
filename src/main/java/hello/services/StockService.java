@@ -13,6 +13,8 @@ public interface StockService {
     List<ProfileStock> getProfileStocks(Profile profile);
     boolean createNewStock(Profile profile, String symbol, float price, int share, Date boughtDate);
     boolean deleteOneStock(ProfileStock stock);
+    List<ProfileStock> getProfileStockWithName(Profile profile, String stockName);
+    ProfileStock getProfileStockWithPrimaryId(Integer id);
 
     boolean updateStockPrice(ProfileStock stock, float price);
     boolean updateStockShare(ProfileStock stock, int share);

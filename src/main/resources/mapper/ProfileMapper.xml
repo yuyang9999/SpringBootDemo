@@ -29,6 +29,7 @@
   <select id="selectByUserIdAndProfileName" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
+    from profiles
     where user_id=#{param1} and pname=#{param2}
   </select>
 

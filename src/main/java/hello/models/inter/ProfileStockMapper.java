@@ -18,4 +18,6 @@ public interface ProfileStockMapper {
     int updateByPrimaryKey(ProfileStock record);
 
     List<ProfileStock> selectByProfileId(Integer pid);
+
+    List<ProfileStock> selectByProfileIdAndStockName(Integer pid, String stockName);
 }
