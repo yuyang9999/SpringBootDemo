@@ -2,6 +2,7 @@ package hello.services.impl;
 
 import hello.models.dbmodel.UserAccount;
 import hello.models.inter.UserAccountMapper;
+import hello.models.inter.UserRoleMapper;
 import hello.services.UserAccountService;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,11 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     private UserAccountMapper userAccountMapper;
 
+    private UserRoleMapper userRoleMapper;
+
     public UserAccountServiceImpl() {
         userAccountMapper = BatisMappers.userAccountMapper;
+        userRoleMapper = BatisMappers.userRoleMapper;
     }
 
     private boolean isUserExists(String userName, String email) {
@@ -54,6 +58,9 @@ public class UserAccountServiceImpl implements UserAccountService {
         account.setPassword(password);
 
         int ret = userAccountMapper.insertSelective(account);
+
+        //also register user
+
 
         return ret == 1;
     }
