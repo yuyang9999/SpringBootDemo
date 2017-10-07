@@ -38,7 +38,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 @SpringBootTest(classes = Application.class)
-@ActiveProfiles("mvc")
 public class AuthServerOAuth2ConfigTest {
 
     @Autowired
