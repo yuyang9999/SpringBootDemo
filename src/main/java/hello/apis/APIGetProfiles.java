@@ -6,6 +6,7 @@ import hello.models.dbmodel.UserAccount;
 import hello.services.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+
 
 /**
  * Created by yangyu on 3/9/17.
@@ -39,6 +42,12 @@ public class APIGetProfiles {
     private ProfileService profileService;
 
 
+    static private final ApiResponse userNotExistError = new ApiResponse(true, "user is not existed", "");
+    static private final ApiResponse nameNotValidError = new ApiResponse(true, "user is not existed", "");
+
+
+
+
     private UserAccount getCurrentUserAccount() {
         Authentication contextHolder = SecurityContextHolder.getContext().getAuthentication();
         if (contextHolder == null) {
@@ -60,129 +69,149 @@ public class APIGetProfiles {
     }
 
     @RequestMapping(apiVersion + "/profiles")
-    public List<Profile> getProfiles() {
+    public ApiResponse getProfiles() {
         List<Profile> ret = new ArrayList<Profile>();
 
         UserAccount userAccount = getCurrentUserAccount();
         if (userAccount == null) {
-            return ret;
+            return new ApiResponse(true, "user account is not existed", "");
         }
 
         ret = profileService.getProfilesForUser(userAccount);
-        return ret;
+
+        return new ApiResponse(false, "", ret);
     }
 
     @RequestMapping(value = apiVersion + "/profile_delete", method = RequestMethod.POST)
-    public boolean deleteOneProfile(@RequestParam(value = "pname") String pname) {
+    public ApiResponse deleteOneProfile(@RequestParam(value = "pname") String pname) {
         if (StringUtils.isBlank(pname)) {
-            return false;
+            return new ApiResponse(true, "profile name is not valid", "");
         }
 
         UserAccount userAccount = getCurrentUserAccount();
         if (userAccount == null) {
-            return false;
+            return new ApiResponse(true, "user account is not valid", "");
         }
 
         Profile profile = profileService.getUserProfileWithName(userAccount, pname);
         if (profile == null) {
-            return false;
+            return new ApiResponse(true, "profile is not existed", "");
         }
 
-        return profileService.deleteProfile(profile);
+        if (profileService.deleteProfile(profile)) {
+            return new ApiResponse(false, "", true);
+        } else {
+            return new ApiResponse(true, "delete profile failed", "");
+        }
     }
 
     @RequestMapping(apiVersion + "/profile_add")
-    public boolean addOneProfile(@RequestParam(value = "pname") String pname) {
+    public ApiResponse addOneProfile(@RequestParam(value = "pname") String pname) {
         if (StringUtils.isBlank(pname)) {
-            return false;
+            return new ApiResponse(true, "profile name is not valid", "");
         }
 
         UserAccount userAccount = getCurrentUserAccount();
         if (userAccount == null) {
-            return false;
+            return new ApiResponse(true, "user account is not valid", "");
         }
 
         //could not create a profile with same name as existing profile name
         Profile profile = profileService.getUserProfileWithName(userAccount, pname);
         if (profile != null) {
-            return false;
+            return new ApiResponse(true, "the profile with the same name already exists", "");
         }
 
-        return profileService.createNewProfileForUser(userAccount, pname);
+        if (profileService.createNewProfileForUser(userAccount, pname)) {
+            return new ApiResponse(false, "", true);
+        } else {
+            return new ApiResponse(true, "create profile failed", "");
+        }
     }
 
     @RequestMapping(apiVersion + "/profile_symbols")
-    public List<ProfileStock> getProfileSymbols(@RequestParam(value = "pname") String pname) {
+    public ApiResponse getProfileSymbols(@RequestParam(value = "pname") String pname) {
         List<ProfileStock> ret = new ArrayList<ProfileStock>();
 
         if (StringUtils.isBlank(pname)) {
-            return ret;
+            return new ApiResponse("profile name is not valid");
         }
 
         UserAccount user = getCurrentUserAccount();
         if (user == null) {
-            return ret;
+            return userNotExistError;
         }
 
         Profile profile = profileService.getUserProfileWithName(user, pname);
         if (profile == null) {
-            return ret;
+            return new ApiResponse("can't find profile");
         }
 
         List<ProfileStock> stocks = stockService.getProfileStocks(profile);
         if (stocks == null) {
-            return ret;
+            return new ApiResponse("can't find stocks");
         }
 
-        return stocks;
+        return new ApiResponse(stocks);
     }
 
     @RequestMapping(apiVersion + "/profile_symbol_add")
-    public boolean addProfileSymbol(@RequestParam(value = "pname") String pname,  @RequestParam(value = "sname") String sname, @RequestParam(value = "share") Integer share, @RequestParam(value = "price") Float price,  @RequestParam(value = "bought_date") Date date) {
+    public ApiResponse addProfileSymbol(@RequestParam(value = "pname") String pname,  @RequestParam(value = "sname") String sname, @RequestParam(value = "share") Integer share, @RequestParam(value = "price") Float price,  @RequestParam(value = "bought_date") @DateTimeFormat(pattern="yyyy-MM-dd") Date date) {
         if (StringUtils.isBlank(sname) || StringUtils.isBlank(pname)) {
-            return false;
+            return nameNotValidError;
         }
 
         //check stock name is valid
         if (!symbolService.isSymbolExists(sname)) {
-            return false;
+            return new ApiResponse("stock name is not valid");
         }
 
         UserAccount user = getCurrentUserAccount();
         if (user == null) {
-            return false;
+            return userNotExistError;
         }
 
         Profile profile = profileService.getUserProfileWithName(user, pname);
         if (profile == null) {
-            return false;
+            return new ApiResponse("profile name not existed");
         }
 
-        return stockService.createNewStock(profile, sname, price, share, date);
+        boolean succeed =  stockService.createNewStock(profile, sname, price, share, date);
+        if (!succeed) {
+            return new ApiResponse("can't add new symbol");
+        }
+
+        return new ApiResponse(false, "", "");
     }
 
     @RequestMapping(value = apiVersion + "/profile_symbol_delete", method = RequestMethod.POST)
-    public boolean deleteProfileSymbol(@RequestParam(value = "pname") String pname, @RequestParam(value = "profile_stock_id") Integer profile_stock_id) {
+    public ApiResponse deleteProfileSymbol(@RequestParam(value = "pname") String pname, @RequestParam(value = "profile_stock_id") Integer profile_stock_id) {
         if (StringUtils.isBlank(pname) || profile_stock_id == null) {
-            return false;
+            return nameNotValidError;
         }
 
         UserAccount user = getCurrentUserAccount();
         if (user == null) {
-            return false;
+            return userNotExistError;
         }
 
         Profile profile = profileService.getUserProfileWithName(user, pname);
         if (profile == null) {
-            return false;
+            return new ApiResponse("profile is not valid");
         }
 
         ProfileStock profileStock = stockService.getProfileStockWithPrimaryId(profile_stock_id);
         if (profileStock == null || profileStock.getPid() != profile.getPid()) {
-            return false;
+            return new ApiResponse("stock is not valid");
         }
 
-        return stockService.deleteOneStock(profileStock);
+        boolean succeed =  stockService.deleteOneStock(profileStock);
+
+        if (!succeed) {
+            return new ApiResponse("delete failed");
+        }
+
+        return new ApiResponse(false, "",       "");
     }
 
 }

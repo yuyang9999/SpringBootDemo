@@ -18,4 +18,16 @@ public class ApiResponse {
         this.errorMsg = errorMsg;
         this.response = response;
     }
+
+    public ApiResponse(String errorMsg) {
+        this.hasError = true;
+        this.errorMsg = errorMsg;
+        this.response = "";
+    }
+
+    public ApiResponse(Object response) {
+        this.hasError = false;
+        this.errorMsg = "";
+        this.response = response;
+    }
 }
