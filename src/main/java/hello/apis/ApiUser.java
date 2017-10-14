@@ -5,6 +5,7 @@ import hello.models.inter.UserRoleMapper;
 import hello.services.UserAccountService;
 import lombok.Data;
 import lombok.Getter;
+import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
@@ -66,8 +67,10 @@ public class ApiUser {
             return new ApiResponse(true, ((FieldError)firstError).getField() + ":" + firstError.getDefaultMessage(), false);
         }
 
-        boolean succeed = userAccountService.registerUser(input.getUserName(), input.getEmail(), input.getPassword());
-        assert(succeed);
+        Pair<Boolean, String> ret = userAccountService.registerUser(input.getUserName(), input.getEmail(), input.getPassword());
+        if (!ret.getLeft()) {
+            return new ApiResponse(false, ret.getRight(), "");
+        }
 
         return new ApiResponse(false, "", true);
     }
