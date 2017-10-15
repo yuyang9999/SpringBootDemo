@@ -5,7 +5,7 @@ drop table if exists user_account;
 drop table if exists stock_history;
 drop table if exists stock_symbols;
 
-create table user_account (
+create table if not EXISTS user_account (
   user_id int(11) not null auto_increment,
   username varchar(45) NOT NULL,
   password varchar(45) NOT NULL,
@@ -16,7 +16,7 @@ create table user_account (
 )   default character set utf8mb4;
 
 
-create table user_account_roles (
+create table if not EXISTS user_account_roles (
   user_role_id int(11) NOT NULL AUTO_INCREMENT,
   username varchar(45) NOT NULL,
   role varchar(45) NOT NULL,
@@ -27,17 +27,17 @@ create table user_account_roles (
 )  default character set utf8mb4;
 
 
-create table stock_symbols (
+create table if not EXISTS stock_symbols (
   stock_id int(11) not null auto_increment,
   symbol varchar(50) not null,
   name varchar(100) not null,
   sector varchar(50),
-  industry varchar(50),
+  industry varchar(100),
   primary key (`stock_id`),
   unique key `stock_symbol` (`symbol`)
 ) default character set utf8mb4;
 
-create table stock_history(
+create table if not EXISTS stock_history(
   h_id int(11) not null auto_increment,
   symbol varchar(45) not null,
   date DATE not null,
@@ -53,7 +53,7 @@ create table stock_history(
 ) DEFAULT CHARACTER SET utf8mb4;
 
 
-CREATE TABLE profiles (
+CREATE TABLE if not EXISTS profiles (
   pid int(11) not null auto_increment,
   user_id int(11) not null,
   pname varchar(45) not null,
@@ -63,7 +63,7 @@ CREATE TABLE profiles (
   CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_account` (`user_id`)
 )  default character set utf8mb4;
 
-create table profile_stocks (
+create table if not EXISTS profile_stocks (
   sid int(11) not null auto_increment,
   user_id int(11) not null,
   pid int(11) not null,

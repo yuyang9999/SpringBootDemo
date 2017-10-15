@@ -28,14 +28,14 @@
     SELECT
     <include refid="Base_Column_List" />
     from stock_history
-    where symbol={#param1} and date={#param2}
+    where symbol=#{param1} and date=#{param2}
   </select>
 
   <select id="selectBySymbolNameAndDateRange" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />
     from stock_history
-    where symbol={#param1} and date BETWEEN {#param2} and {#param3}
+    where symbol=#{param1} and date BETWEEN #{param2} and #{param3}
     order by date desc;
   </select>
 

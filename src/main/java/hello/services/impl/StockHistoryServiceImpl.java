@@ -3,8 +3,11 @@ package hello.services.impl;
 import hello.models.dbmodel.StockHistory;
 import hello.models.inter.StockHistoryMapper;
 import hello.services.StockHistoryService;
+import hello.utilities.CommonUtilities;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -47,6 +50,14 @@ public class StockHistoryServiceImpl implements StockHistoryService {
 
     @Override
     public List<StockHistory> getStockHistoriesWithSymbolNameAndDateRange(String symbol, Date date1, Date date2) {
-        return mapper.selectBySymbolNameAndDateRange(symbol, date1, date2);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String d1 = format.format(date1);
+        String d2 = format.format(date2);
+        return mapper.selectBySymbolNameAndDateRange(symbol, d1, d2);
+    }
+
+    @PostConstruct
+    void postProcess() throws Exception {
+        CommonUtilities.runPythonCode("/Users/yangyu/Desktop/developer/stock/py_scripts/MySqlWritter.py");
     }
 }

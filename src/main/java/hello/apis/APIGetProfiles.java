@@ -2,6 +2,7 @@ package hello.apis;
 
 import hello.models.dbmodel.Profile;
 import hello.models.dbmodel.ProfileStock;
+import hello.models.dbmodel.StockHistory;
 import hello.models.dbmodel.UserAccount;
 import hello.services.*;
 import org.apache.commons.lang3.StringUtils;
@@ -12,10 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import java.util.*;
 
 
 /**
@@ -148,11 +146,29 @@ public class APIGetProfiles {
         }
 
         List<ProfileStock> stocks = stockService.getProfileStocks(profile);
+
+        //return the latest 30 days stock data if exists
+        Date d1 = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -30);
+        Date d2 = cal.getTime();
+        Map<String, List<StockHistory>> stockData = new HashMap<String, List<StockHistory>>();
+        for (ProfileStock p: stocks) {
+            String symbol = p.getSname();
+            List<StockHistory> sh = historyService.getStockHistoriesWithSymbolNameAndDateRange(symbol, d2, d1);
+            stockData.put(symbol, sh);
+        }
+
+        List<Object> retObject = new ArrayList<Object>();
+        retObject.add(stocks);
+        retObject.add(stockData);
+
+
         if (stocks == null) {
             return new ApiResponse("can't find stocks");
         }
 
-        return new ApiResponse(stocks);
+        return new ApiResponse(retObject);
     }
 
     @RequestMapping(apiVersion + "/profile_symbol_add")

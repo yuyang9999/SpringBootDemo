@@ -15,4 +15,6 @@ public class StockInfo {
         this.symbol = symbol;
         this.companyName = companyName;
     }
+
+    public String getSymbol() {return symbol;}
 }

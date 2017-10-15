@@ -19,7 +19,7 @@ public interface StockHistoryMapper {
 
     int updateByPrimaryKey(StockHistory record);
 
-    List<StockHistory> selectBySymbolNameAndDateRange(String symbolName, Date date1, Date date2);
+    List<StockHistory> selectBySymbolNameAndDateRange(String symbolName, String date1, String date2);
 
     StockHistory selectBySymbolNameAndDate(String symbolName, Date date);
 }

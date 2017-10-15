@@ -1,10 +1,7 @@
 package hello.services.impl;
 
 import hello.Application;
-import hello.models.dbmodel.Profile;
-import hello.models.dbmodel.ProfileStock;
-import hello.models.dbmodel.StockSymbol;
-import hello.models.dbmodel.UserAccount;
+import hello.models.dbmodel.*;
 import hello.models.inter.ProfileStockMapper;
 import hello.services.*;
 import org.junit.Test;
@@ -12,7 +9,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +20,7 @@ import java.util.List;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
+@WebAppConfiguration
 public class UserAccountServiceImplTest {
     @Autowired
     UserAccountService userAccountService;
@@ -68,6 +68,19 @@ public class UserAccountServiceImplTest {
 
         List<ProfileStock> stocks = stockService.getProfileStocks(profile);
         System.out.println(stocks);
+    }
+
+    @Test
+    public void testStockHistory() throws Exception {
+        String d1 = "2017-01-01";
+        String d2 = "2017-01-05";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = format.parse(d1);
+        Date date2 = format.parse(d2);
+
+
+        List<StockHistory> histories = stockHistoryService.getStockHistoriesWithSymbolNameAndDateRange("A", date1, date2);
+        System.out.println(histories);
     }
 
 

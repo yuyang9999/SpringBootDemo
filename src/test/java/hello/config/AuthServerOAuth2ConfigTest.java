@@ -1,6 +1,7 @@
 package hello.config;
 
 import hello.Application;
+import hello.utilities.CommonUtilities;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.annotate.JacksonStdImpl;
 import org.junit.Before;
@@ -21,6 +22,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.net.MulticastSocket;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -131,12 +133,13 @@ public class AuthServerOAuth2ConfigTest {
     }
 
     private String addOneProfileStock(String token, String pname, String stockName, float price, int share, Date date) throws Exception {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         ResultActions result = mockMvc.perform(get("/api/profile_symbol_add")
                 .param("pname", pname)
                 .param("sname", stockName)
                 .param("price", Float.toString(price))
                 .param("share", Integer.toString(share))
-                .param("bought_date", date.toString())
+                .param("bought_date", format.format(date))
                 .header("Authorization", "Bearer " + token)
                 .contentType(CONTENT_TYPE)
                 .accept(CONTENT_TYPE))
@@ -170,6 +173,9 @@ public class AuthServerOAuth2ConfigTest {
 
     @Test
     public void testFlow() throws Exception {
+        //run python code to insert into mysql
+        CommonUtilities.runPythonCode("/Users/yangyu/Desktop/developer/stock/py_scripts/MySqlWritter.py");
+
         String accessToken = obtainAccessToken("tom", "123456");
 
         //test profiles
@@ -183,11 +189,12 @@ public class AuthServerOAuth2ConfigTest {
         System.out.println(profiles);
 
         //add one profile stock
-        String addOneStock = addOneProfileStock(accessToken, "technology", "AAPL", 150, 100, new Date());
+
+        String addOneStock = addOneProfileStock(accessToken, "technology", "AA", 150, 100, new Date());
         System.out.println(addOneStock);
 
         //and another profile stock
-        String addAnotherStock = addOneProfileStock(accessToken, "technology", "AAPL",
+        String addAnotherStock = addOneProfileStock(accessToken, "technology", "AA",
                 150, 200, new Date());
         System.out.println(addAnotherStock);
 
