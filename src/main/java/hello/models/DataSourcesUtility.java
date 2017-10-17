@@ -31,7 +31,7 @@ public class DataSourcesUtility {
 
     static {
         userDataSource = loadDataSource("jdbc:mysql://localhost:3306/users?createDatabaseIfNotExist=true",
-                "root", "123456", "/userScheme.sql", "/userData.sql");
+                "root", "123456", "/userScheme.sql", null);
     }
 
 

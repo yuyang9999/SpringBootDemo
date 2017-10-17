@@ -1,9 +1,9 @@
-drop table if exists user_account_roles;
-drop table if exists profile_stocks;
-drop table if exists profiles;
-drop table if exists user_account;
-drop table if exists stock_history;
-drop table if exists stock_symbols;
+-- drop table if exists user_account_roles;
+-- drop table if exists profile_stocks;
+-- drop table if exists profiles;
+-- drop table if exists user_account;
+-- drop table if exists stock_history;
+-- drop table if exists stock_symbols;
 
 create table if not EXISTS user_account (
   user_id int(11) not null auto_increment,
@@ -12,7 +12,7 @@ create table if not EXISTS user_account (
   enabled tinyint(4) NOT NULL DEFAULT 1,
   email varchar(100) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
-  KEY `name_key_idx` (`username`)
+  UNIQUE KEY `name_key_idx` (`username`)
 )   default character set utf8mb4;
 
 

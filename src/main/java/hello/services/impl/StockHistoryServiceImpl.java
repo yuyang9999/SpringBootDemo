@@ -56,8 +56,8 @@ public class StockHistoryServiceImpl implements StockHistoryService {
         return mapper.selectBySymbolNameAndDateRange(symbol, d1, d2);
     }
 
-    @PostConstruct
-    void postProcess() throws Exception {
-        CommonUtilities.runPythonCode("/Users/yangyu/Desktop/developer/stock/py_scripts/MySqlWritter.py");
-    }
+//    @PostConstruct
+//    void postProcess() throws Exception {
+//        CommonUtilities.runPythonCode("/Users/yangyu/Desktop/developer/stock/py_scripts/MySqlWritter.py");
+//    }
 }
