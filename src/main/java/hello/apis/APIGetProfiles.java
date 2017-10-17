@@ -147,16 +147,18 @@ public class APIGetProfiles {
 
         List<ProfileStock> stocks = stockService.getProfileStocks(profile);
 
-        //return the latest 30 days stock data if exists
+        //return the latest day's stock data if exists
         Date d1 = new Date();
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -30);
+        cal.add(Calendar.DATE, -15);
         Date d2 = cal.getTime();
-        Map<String, List<StockHistory>> stockData = new HashMap<String, List<StockHistory>>();
+        Map<String, StockHistory> stockData = new HashMap<String, StockHistory>();
         for (ProfileStock p: stocks) {
             String symbol = p.getSname();
             List<StockHistory> sh = historyService.getStockHistoriesWithSymbolNameAndDateRange(symbol, d2, d1);
-            stockData.put(symbol, sh);
+            if (sh.size() > 0) {
+                stockData.put(symbol, sh.get(0));
+            }
         }
 
         List<Object> retObject = new ArrayList<Object>();
