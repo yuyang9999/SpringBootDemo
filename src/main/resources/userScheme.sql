@@ -13,7 +13,7 @@ create table if not EXISTS user_account (
   email varchar(100) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `name_key_idx` (`username`)
-)   default character set utf8mb4;
+) default character set utf8mb4;
 
 
 create table if not EXISTS user_account_roles (
@@ -24,7 +24,7 @@ create table if not EXISTS user_account_roles (
   UNIQUE KEY `uni_username_role` (`role`,`username`),
   KEY `fk_username_idx` (`username`),
   CONSTRAINT `fk_username` FOREIGN KEY (`username`) REFERENCES `user_account` (`username`)
-)  default character set utf8mb4;
+) default character set utf8mb4;
 
 
 create table if not EXISTS stock_symbols (
@@ -61,7 +61,7 @@ CREATE TABLE if not EXISTS profiles (
   UNIQUE KEY `unique_pid_pname` (`user_id`, `pname`),
   KEY `profile_name_index` (`pid`, `pname`),
   CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_account` (`user_id`)
-)  default character set utf8mb4;
+) default character set utf8mb4;
 
 create table if not EXISTS profile_stocks (
   sid int(11) not null auto_increment,
@@ -76,4 +76,4 @@ create table if not EXISTS profile_stocks (
   CONSTRAINT `fk_stock_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_account` (`user_id`),
   CONSTRAINT `fk_pid` FOREIGN KEY (`pid`) REFERENCES `profiles` (`pid`),
   CONSTRAINT `ps_fk_symbol` FOREIGN KEY (`sname`) REFERENCES `stock_symbols` (`symbol`)
-)  default character set utf8mb4;
+) default character set utf8mb4;
