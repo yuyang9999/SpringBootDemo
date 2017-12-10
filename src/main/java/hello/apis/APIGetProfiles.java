@@ -132,45 +132,45 @@ public class APIGetProfiles {
         List<ProfileStock> ret = new ArrayList<ProfileStock>();
 
         if (StringUtils.isBlank(pname)) {
-            return new ApiResponse("profile name is not valid");
+            return new ApiResponse(true,"profile name is not valid", ret);
         }
 
         UserAccount user = getCurrentUserAccount();
         if (user == null) {
-            return userNotExistError;
+            return new ApiResponse(true, "user not existed", ret);
         }
 
         Profile profile = profileService.getUserProfileWithName(user, pname);
         if (profile == null) {
-            return new ApiResponse("can't find profile");
+            return new ApiResponse(true, "profile not existed", ret);
         }
 
         List<ProfileStock> stocks = stockService.getProfileStocks(profile);
 
         //return the latest day's stock data if exists
-        Date d1 = new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -15);
-        Date d2 = cal.getTime();
-        Map<String, StockHistory> stockData = new HashMap<String, StockHistory>();
-        for (ProfileStock p: stocks) {
-            String symbol = p.getSname();
-            List<StockHistory> sh = historyService.getStockHistoriesWithSymbolNameAndDateRange(symbol, d2, d1);
-            if (sh.size() > 0) {
-                stockData.put(symbol, sh.get(0));
-            }
-        }
+//        Date d1 = new Date();
+//        Calendar cal = Calendar.getInstance();
+//        cal.add(Calendar.DATE, -15);
+//        Date d2 = cal.getTime();
+//        Map<String, StockHistory> stockData = new HashMap<String, StockHistory>();
+//        for (ProfileStock p: stocks) {
+//            String symbol = p.getSname();
+//            List<StockHistory> sh = historyService.getStockHistoriesWithSymbolNameAndDateRange(symbol, d2, d1);
+//            if (sh.size() > 0) {
+//                stockData.put(symbol, sh.get(0));
+//            }
+//        }
+//
+//        List<Object> retObject = new ArrayList<Object>();
+//        retObject.add(stocks);
+//        retObject.add(stockData);
+//
+//
+//        if (stocks == null) {
+//            return new ApiResponse("can't find stocks");
+//        }
 
-        List<Object> retObject = new ArrayList<Object>();
-        retObject.add(stocks);
-        retObject.add(stockData);
-
-
-        if (stocks == null) {
-            return new ApiResponse("can't find stocks");
-        }
-
-        return new ApiResponse(retObject);
+        return new ApiResponse(stocks);
     }
 
     @RequestMapping(apiVersion + "/profile_symbol_add")
