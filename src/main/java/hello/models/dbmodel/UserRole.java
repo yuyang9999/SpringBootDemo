@@ -1,4 +1,4 @@
-package com.naughtypiggy.android.stock.network.model;
+package hello.models.dbmodel;
 
 public class UserRole {
     private Integer userRoleId;

@@ -1,4 +1,4 @@
-package com.naughtypiggy.android.stock.network.model;
+package hello.models.dbmodel;
 
 import java.util.Date;
 

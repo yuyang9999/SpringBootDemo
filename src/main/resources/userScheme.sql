@@ -1,9 +1,9 @@
--- drop table if exists user_account_roles;
--- drop table if exists profile_stocks;
--- drop table if exists profiles;
--- drop table if exists user_account;
--- drop table if exists stock_history;
--- drop table if exists stock_symbols;
+# drop table if exists user_account_roles;
+# drop table if exists profile_stocks;
+# drop table if exists profiles;
+# drop table if exists user_account;
+# drop table if exists stock_history;
+# drop table if exists stock_symbols;
 
 create table if not EXISTS user_account (
   user_id int(11) not null auto_increment,
@@ -46,7 +46,7 @@ create table if not EXISTS stock_history(
   low  FLOAT(10, 2),
   clos FLOAT(10,2),
   adj_close FLOAT(10,2),
-  volume int(11),
+  volume bigint(13),
   PRIMARY key (`h_id`),
   UNIQUE KEY `sh_unique` (`symbol`, `date`),
   CONSTRAINT `sh_symbol_id` FOREIGN KEY (`symbol`) REFERENCES `stock_symbols` (`symbol`)

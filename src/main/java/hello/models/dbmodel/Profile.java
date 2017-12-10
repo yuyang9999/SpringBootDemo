@@ -1,4 +1,4 @@
-package com.naughtypiggy.android.stock.network.model;
+package hello.models.dbmodel;
 
 public class Profile {
     private Integer pid;
