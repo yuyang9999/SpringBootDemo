@@ -3,6 +3,7 @@ package hello.services.impl;
 import hello.models.dbmodel.Profile;
 import hello.models.dbmodel.UserAccount;
 import hello.models.inter.ProfileMapper;
+import hello.models.inter.ProfileStockMapper;
 import hello.services.ProfileService;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +15,11 @@ import java.util.List;
 @Service
 public class ProfileServiceImpl implements ProfileService {
     private ProfileMapper profileMapper;
+    private ProfileStockMapper profileStockMapper;
 
     public ProfileServiceImpl() {
         profileMapper = BatisMappers.profileMapper;
+        profileStockMapper = BatisMappers.profileStockMapper;
     }
 
     @Override
@@ -36,6 +39,8 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public boolean deleteProfile(Profile profile) {
+        profileStockMapper.deleteByPid(profile.getPid());
+
         Integer deleteNum = profileMapper.deleteByPrimaryKey(profile.getPid());
         return deleteNum == 1;
     }

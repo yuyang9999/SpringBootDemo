@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface ProfileStockMapper {
     int deleteByPrimaryKey(Integer sid);
+    int deleteByPid(Integer pid);
 
     int insert(ProfileStock record);
 

@@ -39,6 +39,12 @@
     delete from profile_stocks
     where sid = #{sid,jdbcType=INTEGER}
   </delete>
+
+  <delete id="deleteByPid" parameterType="java.lang.Integer">
+    delete from profile_stocks
+    where pid = #{pid, jdbcType=INTEGER}
+  </delete>
+
   <insert id="insert" parameterType="hello.models.dbmodel.ProfileStock">
     insert into profile_stocks (sid, user_id, pid, 
       sname, price, share, bought_time
