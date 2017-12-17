@@ -30,4 +30,8 @@ public class ApiResponse {
         this.errorMsg = "";
         this.response = response;
     }
+
+    public static final ApiResponse succeedResp = new ApiResponse(false, "", "");
+
+    public static final ApiResponse userNotExistedError = new ApiResponse(false, "user not existed", "");
 }

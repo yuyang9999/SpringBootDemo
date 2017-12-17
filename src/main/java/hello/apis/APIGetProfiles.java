@@ -8,6 +8,7 @@ import hello.services.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -172,6 +173,37 @@ public class APIGetProfiles {
 
         return new ApiResponse(stocks);
     }
+
+
+    @RequestMapping(apiVersion + "/profile_only_add_symbol")
+    public ApiResponse addProfileOnlySymbol(@RequestParam(value = "pname") String pname, @RequestParam(value = "sname") String sname) {
+        if (StringUtils.isBlank(pname) || StringUtils.isBlank(sname)) {
+            return nameNotValidError;
+        }
+
+        //check stock name is valid
+        if (!symbolService.isSymbolExists(sname)) {
+            return new ApiResponse("stock name is not valid");
+        }
+
+        UserAccount user = getCurrentUserAccount();
+        if (user == null) {
+            return userNotExistError;
+        }
+
+        Profile profile =  profileService.getUserProfileWithName(user, pname);
+        if (profile == null) {
+            return new ApiResponse("profile not existed");
+        }
+
+        boolean succeed = stockService.createNewStock(profile, sname, 0, 0, new Date());
+        if (!succeed) {
+            return new ApiResponse("can't add new symbol");
+        }
+
+        return ApiResponse.succeedResp;
+    }
+
 
     @RequestMapping(apiVersion + "/profile_symbol_add")
     public ApiResponse addProfileSymbol(@RequestParam(value = "pname") String pname,  @RequestParam(value = "sname") String sname, @RequestParam(value = "share") Integer share, @RequestParam(value = "price") Float price,  @RequestParam(value = "bought_date") @DateTimeFormat(pattern="yyyy-MM-dd") Date date) {

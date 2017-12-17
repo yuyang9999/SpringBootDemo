@@ -22,7 +22,8 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public List<ProfileStock> getProfileStocks(Profile profile) {
-        return stockMapper.selectByProfileId(profile.getPid());
+        List<ProfileStock> ret =  stockMapper.selectByProfileId(profile.getPid());
+        return ret;
     }
 
     @Override
